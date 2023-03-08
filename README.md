@@ -1,1 +1,4 @@
-Rails app generated with [lewagon/rails-templates](https://github.com/lewagon/rails-templates), created by the [Le Wagon coding bootcamp](https://www.lewagon.com) team.
+<h1>Brunchtime</h1>
+Find the brunch spots with the shortest wait-times. Filter through restaurants by wait-time, get directions, rate wait-time accuracy, and add restaurants to your favourites.
+
+Created with Rails 6.
