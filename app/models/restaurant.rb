@@ -7,10 +7,10 @@ class Restaurant < ApplicationRecord
 
   include PgSearch::Model
   pg_search_scope :search_by_address,
-    against: [ :address ],
-    using: {
-      tsearch: { prefix: true }
-    }
+                  against: [:address],
+                  using: {
+                    tsearch: { prefix: true }
+                  }
 
   def update_avg_rating
     ratings = visits.map(&:rating).compact

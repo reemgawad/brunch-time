@@ -34,8 +34,8 @@ class RestaurantsController < ApplicationController
         }
       end
     end
-    fetch_restaurants
-    raise
+    # fetch_restaurants
+    # raise
   end
 
   def show
@@ -58,8 +58,27 @@ class RestaurantsController < ApplicationController
   end
 
   def fetch_restaurants
-    url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants%20in%20Montreal&key=#{ENV['PLACES_API_KEY']}"
+    @restaurants = []
+    url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=brunch_restaurants%20in%20Montreal&key=#{ENV['PLACES_API_KEY']}"
     url_serialized = URI.open(url).read
-    @data = JSON.parse(url_serialized)["results"].first
+    @results = JSON.parse(url_serialized)["results"]
+    @results.each do |object|
+      fetch_one_restaurant(object["place_id"])
+    end
+  end
+
+  def fetch_one_restaurant(place_id)
+    url = "https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&fields=name,rating,formatted_phone_number,formatted_address,current_opening_hours,price_level&key=#{ENV['PLACES_API_KEY']}"
+    url_serialized = URI.open(url).read
+    result = JSON.parse(url_serialized)["result"]
+
+    # Create a new Restaurant object using data received
+    Restaurant.create!(
+      name: result["name"],
+      address: result["formatted_address"],
+      price_range: result["price_level"]&.times { "$" },
+      opening_hours: result["current_opening_hours"]["weekday_text"],
+      phone_number: result["formatted_phone_number"]
+    )
   end
 end
