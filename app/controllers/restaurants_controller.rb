@@ -6,12 +6,13 @@ class RestaurantsController < ApplicationController
   before_action :set_restaurant, only: %i[show toggle_favorite]
 
   def index
+    fetch_restaurants
     # Filter:
     # 1- No search values present
     # 2- Only location value
     # 3- Only wait-time value
     # 4- Both location and wait-time
-    @restaurants = Restaurant.all.order(wait_time: :asc)
+    @restaurants = Restaurant.all
     @restaurants = @restaurants.where("address ILIKE ?", "%#{params[:location]}%") unless params[:location].blank?
     @restaurants = @restaurants.where("wait_time <= ?", params[:wait_time]) unless params[:wait_time].blank?
 
@@ -34,8 +35,6 @@ class RestaurantsController < ApplicationController
         }
       end
     end
-    # fetch_restaurants
-    # raise
   end
 
   def show
@@ -68,17 +67,25 @@ class RestaurantsController < ApplicationController
   end
 
   def fetch_one_restaurant(place_id)
-    url = "https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&fields=name,rating,formatted_phone_number,formatted_address,current_opening_hours,price_level&key=#{ENV['PLACES_API_KEY']}"
+    url = "https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&fields=name,rating,formatted_phone_number,formatted_address,geometry,current_opening_hours,price_level&key=#{ENV['PLACES_API_KEY']}"
     url_serialized = URI.open(url).read
     result = JSON.parse(url_serialized)["result"]
 
+    # Check if address already exists in DB
     # Create a new Restaurant object using data received
-    Restaurant.create!(
-      name: result["name"],
-      address: result["formatted_address"],
-      price_range: result["price_level"]&.times { "$" },
-      opening_hours: result["current_opening_hours"]["weekday_text"],
-      phone_number: result["formatted_phone_number"]
-    )
+    unless Restaurant.find_by(address: result["formatted_address"])
+      Restaurant.create!(
+        name: result["name"],
+        address: result["formatted_address"],
+        price_range: result["price_level"]&.times { "$" },
+        opening_hours: result["current_opening_hours"]["weekday_text"].join("\n"),
+        phone_number: result["formatted_phone_number"],
+        latitude: result["geometry"]["location"]["lat"],
+        longitude: result["geometry"]["location"]["lng"]
+      )
+    end
+    # Stop duplication of restaurants created..
+    # Filter by "open now" field somehow
+    # Add photo of resto
   end
 end

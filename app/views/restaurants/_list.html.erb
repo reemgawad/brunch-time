@@ -7,7 +7,7 @@
             <div class="card-product justify-content-between">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="me-3">
-                  <img src= "<%= cl_image_path (restaurant.photo.key)%>">
+                  <img src= "<%= cl_image_path (restaurant.photo.key) if restaurant.photo.key %>">
                 </div>
 
                 <div>
