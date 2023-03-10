@@ -7,7 +7,7 @@ class Restaurant < ApplicationRecord
 
   include PgSearch::Model
   pg_search_scope :search_by_address,
-                  against: [:address],
+                  against: [:address, :name],
                   using: {
                     tsearch: { prefix: true }
                   }

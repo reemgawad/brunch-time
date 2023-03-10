@@ -12,7 +12,7 @@ class RestaurantsController < ApplicationController
     # 2- Only location value
     # 3- Only wait-time value
     # 4- Both location and wait-time
-    @restaurants = Restaurant.all
+    @restaurants = Restaurant.all.order(wait_time: :asc)
     @restaurants = @restaurants.where("address ILIKE ?", "%#{params[:location]}%") unless params[:location].blank?
     @restaurants = @restaurants.where("wait_time <= ?", params[:wait_time]) unless params[:wait_time].blank?
 
@@ -59,22 +59,22 @@ class RestaurantsController < ApplicationController
   def fetch_restaurants
     @restaurants = []
     url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=brunch_restaurants%20in%20Montreal&key=#{ENV['PLACES_API_KEY']}"
-    url_serialized = URI.open(url).read
+    url_serialized = URI.parse(url).read
     @results = JSON.parse(url_serialized)["results"]
     @results.each do |object|
-      fetch_one_restaurant(object["place_id"])
+      fetch_single_restaurant(object["place_id"])
     end
   end
 
-  def fetch_one_restaurant(place_id)
-    url = "https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&fields=name,rating,formatted_phone_number,formatted_address,geometry,current_opening_hours,price_level&key=#{ENV['PLACES_API_KEY']}"
-    url_serialized = URI.open(url).read
+  def fetch_single_restaurant(place_id)
+    url = "https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&fields=name,rating,formatted_phone_number,formatted_address,geometry,current_opening_hours,price_level,photos&key=#{ENV['PLACES_API_KEY']}"
+    url_serialized = URI.parse(url).read
     result = JSON.parse(url_serialized)["result"]
 
     # Check if address already exists in DB
     # Create a new Restaurant object using data received
     unless Restaurant.find_by(address: result["formatted_address"])
-      Restaurant.create!(
+      resto = Restaurant.create!(
         name: result["name"],
         address: result["formatted_address"],
         price_range: result["price_level"]&.times { "$" },
@@ -83,9 +83,15 @@ class RestaurantsController < ApplicationController
         latitude: result["geometry"]["location"]["lat"],
         longitude: result["geometry"]["location"]["lng"]
       )
+      fetch_restaurant_photo(resto, result["photos"].first["photo_reference"])
     end
-    # Stop duplication of restaurants created..
     # Filter by "open now" field somehow
-    # Add photo of resto
+  end
+
+  def fetch_restaurant_photo(resto, photo_ref)
+    url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=#{photo_ref}&key=#{ENV['PLACES_API_KEY']}"
+    file = URI.open(url)
+    resto.photo.attach(io: file, filename: "#{resto.name}.png", content_type: "image/png")
+    resto.save!
   end
 end
