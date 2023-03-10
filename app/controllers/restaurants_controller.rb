@@ -16,25 +16,8 @@ class RestaurantsController < ApplicationController
     @restaurants = @restaurants.where("address ILIKE ?", "%#{params[:location]}%") unless params[:location].blank?
     @restaurants = @restaurants.where("wait_time <= ?", params[:wait_time]) unless params[:wait_time].blank?
 
-    @markers = @restaurants.geocoded.map do |restaurant|
-      {
-        lat: restaurant.latitude,
-        lng: restaurant.longitude,
-        info_window: render_to_string(partial: "info_window", locals: { restaurant: restaurant }),
-        image_url: helpers.asset_url("beer.png")
-      }
-    end
-
-    # implementing ajax in search
-    respond_to do |format|
-      format.html
-      format.json do
-        render json: {
-          restaurants: render_to_string('restaurants/_list.html', layout: false, locals: { restaurants: @restaurants }),
-          markers: @markers.to_json
-        }
-      end
-    end
+    display_markers(@restaurants)
+    response_formats
   end
 
   def show
@@ -73,7 +56,8 @@ class RestaurantsController < ApplicationController
     # Check if address already exists in DB
     # Create a new Restaurant object using data received
     create_restaurant(result) unless Restaurant.find_by(address: result["formatted_address"])
-    # Filter by "open now" field somehow (Using Stimulus controller to fetch open_now data? and add it to the corresponding resto html?)
+    # Filter by "open now" field somehow (Using Stimulus controller to fetch open_now data?
+    # # and add it to the corresponding resto html?)
     # Add place_id field to Restaurant to check DB against place_id instead of address
     # Add guard clause for photos if blank
   end
@@ -96,5 +80,29 @@ class RestaurantsController < ApplicationController
       longitude: result["geometry"]["location"]["lng"]
     )
     fetch_restaurant_photo(resto, result["photos"].first["photo_reference"])
+  end
+
+  # Map marker helper
+  def display_markers(restaurants)
+    @markers = restaurants.geocoded.map do |restaurant|
+      {
+        lat: restaurant.latitude,
+        lng: restaurant.longitude,
+        info_window: render_to_string(partial: "info_window.html", locals: { restaurant: restaurant }),
+        image_url: helpers.asset_url("beer.png")
+      }
+    end
+  end
+
+  def response_formats
+    respond_to do |format|
+      format.html
+      format.json do
+        render json: {
+          restaurants: render_to_string('restaurants/_list.html', layout: false, locals: { restaurants: @restaurants }),
+          markers: @markers.to_json
+        }
+      end
+    end
   end
 end
