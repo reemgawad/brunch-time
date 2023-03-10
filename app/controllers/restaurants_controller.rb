@@ -6,7 +6,7 @@ class RestaurantsController < ApplicationController
   before_action :set_restaurant, only: %i[show toggle_favorite]
 
   def index
-    fetch_restaurants
+    # fetch_restaurants
     # Filter:
     # 1- No search values present
     # 2- Only location value
@@ -20,7 +20,7 @@ class RestaurantsController < ApplicationController
       {
         lat: restaurant.latitude,
         lng: restaurant.longitude,
-        info_window: render_to_string(partial: "info_window.html", locals: { restaurant: restaurant }),
+        info_window: render_to_string(partial: "info_window", locals: { restaurant: restaurant }),
         image_url: helpers.asset_url("beer.png")
       }
     end
@@ -57,7 +57,6 @@ class RestaurantsController < ApplicationController
   end
 
   def fetch_restaurants
-    @restaurants = []
     url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=brunch_restaurants%20in%20Montreal&key=#{ENV['PLACES_API_KEY']}"
     url_serialized = URI.parse(url).read
     @results = JSON.parse(url_serialized)["results"]
@@ -74,8 +73,9 @@ class RestaurantsController < ApplicationController
     # Check if address already exists in DB
     # Create a new Restaurant object using data received
     create_restaurant(result) unless Restaurant.find_by(address: result["formatted_address"])
-    # Filter by "open now" field somehow
+    # Filter by "open now" field somehow (Using Stimulus controller to fetch open_now data? and add it to the corresponding resto html?)
     # Add place_id field to Restaurant to check DB against place_id instead of address
+    # Add guard clause for photos if blank
   end
 
   def fetch_restaurant_photo(resto, photo_ref)

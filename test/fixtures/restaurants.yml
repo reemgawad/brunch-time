@@ -1,0 +1,11 @@
+first:
+  name: Test Restaurant
+  address: "1840 Rue Beaubien E, Montréal, QC H2G 1L6, Canada"
+  description: nil
+  price_range: "2"
+  opening_hours: "Monday: 9:00 AM – 3:00 PM\nTuesday: 9:00 AM – 3:00 PM\nWednesday: 9:00 AM – 3:00 PM\nThursday: 9:00 AM – 3:00 PM\nFriday: 9:00 AM – 3:00 PM\nSaturday: 9:00 AM – 3:00 PM\nSunday: 9:00 AM – 3:00 PM"
+  phone_number: "(514) 903-0676"
+  wait_time: nil
+  latitude: 45.54354099999999
+  longitude: -73.5959549
+  avg_rating: 0.0

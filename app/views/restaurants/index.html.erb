@@ -40,7 +40,7 @@
         </div>
 
         <div data-refresh-list-target="restaurantsList" >
-          <%= render 'list.html', restaurants: @restaurants %>
+          <%= render 'list', restaurants: @restaurants %>
         </div>
     </div>
 
@@ -56,7 +56,7 @@
           data-action="refresh-list:refreshMap->mapbox#refreshMapAjax">
         </div>
       <div data-refresh-list-target="restaurantsList" class="d-none">
-        <%= render 'list.html', restaurants: @restaurants %>
+        <%= render 'list', restaurants: @restaurants %>
       </div>
     </div>
   <div class="d-flex justify-content-center">
