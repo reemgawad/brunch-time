@@ -1,10 +1,6 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+
 print "Cleaning up db..."
 Visit.destroy_all
 Restaurant.destroy_all
@@ -217,20 +213,20 @@ restaurant_seven = Restaurant.new(
 restaurant_seven.photo.attach(io: File.open('app/assets/images/passe.webp'), filename: 'passe.webp')
 restaurant_seven.save!
 
-restaurant_eight = Restaurant.new(
-  {
-    name: "Ginko Café & Bar",
-    address: "308 RUE STE-CATHERINE EST, MONTREAL",
-    description: "Popular brunch spot serving eclectic Canadian fare in a chic, open room with lots of natural light.",
-    price_range: "$",
-    opening_hours: "7am-9pm",
-    phone_number: "514-379-4449",
-    wait_time: 10
+# restaurant_eight = Restaurant.new(
+#   {
+#     name: "Ginko Café & Bar",
+#     address: "308 RUE STE-CATHERINE EST, MONTREAL",
+#     description: "Popular brunch spot serving eclectic Canadian fare in a chic, open room with lots of natural light.",
+#     price_range: "$",
+#     opening_hours: "7am-9pm",
+#     phone_number: "514-379-4449",
+#     wait_time: 10
 
-  }
-)
-restaurant_eight.photo.attach(io: File.open('app/assets/images/ginko.webp'), filename: 'ginko.webp')
-restaurant_eight.save!
+#   }
+# )
+# restaurant_eight.photo.attach(io: File.open('app/assets/images/ginko.webp'), filename: 'ginko.webp')
+# restaurant_eight.save!
 
 restaurant_nine = Restaurant.new(
   {
@@ -688,7 +684,7 @@ visit_ninea = Visit.new(
   }
 )
 visit_ninea.user = user_two
-visit_ninea.restaurant = restaurant_eight
+visit_ninea.restaurant = restaurant_seven
 visit_ninea.save!
 
 visit_nineb = Visit.new(
@@ -700,7 +696,7 @@ visit_nineb = Visit.new(
   }
 )
 visit_nineb.user = user_ten
-visit_nineb.restaurant = restaurant_eight
+visit_nineb.restaurant = restaurant_seven
 visit_nineb.save!
 
 visit_ninec = Visit.new(
@@ -712,7 +708,7 @@ visit_ninec = Visit.new(
   }
 )
 visit_ninec.user = user_eight
-visit_ninec.restaurant = restaurant_eight
+visit_ninec.restaurant = restaurant_seven
 visit_ninec.save!
 
 # resto9
