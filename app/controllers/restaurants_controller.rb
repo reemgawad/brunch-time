@@ -73,25 +73,28 @@ class RestaurantsController < ApplicationController
 
     # Check if address already exists in DB
     # Create a new Restaurant object using data received
-    unless Restaurant.find_by(address: result["formatted_address"])
-      resto = Restaurant.create!(
-        name: result["name"],
-        address: result["formatted_address"],
-        price_range: result["price_level"]&.times { "$" },
-        opening_hours: result["current_opening_hours"]["weekday_text"].join("\n"),
-        phone_number: result["formatted_phone_number"],
-        latitude: result["geometry"]["location"]["lat"],
-        longitude: result["geometry"]["location"]["lng"]
-      )
-      fetch_restaurant_photo(resto, result["photos"].first["photo_reference"])
-    end
+    create_restaurant(result) unless Restaurant.find_by(address: result["formatted_address"])
     # Filter by "open now" field somehow
+    # Add place_id field to Restaurant to check DB against place_id instead of address
   end
 
   def fetch_restaurant_photo(resto, photo_ref)
     url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=#{photo_ref}&key=#{ENV['PLACES_API_KEY']}"
-    file = URI.open(url)
+    file = URI.parse(url).open
     resto.photo.attach(io: file, filename: "#{resto.name}.png", content_type: "image/png")
     resto.save!
+  end
+
+  def create_restaurant(result)
+    resto = Restaurant.create!(
+      name: result["name"],
+      address: result["formatted_address"],
+      price_range: result["price_level"],
+      opening_hours: result["current_opening_hours"]["weekday_text"].join("\n"),
+      phone_number: result["formatted_phone_number"],
+      latitude: result["geometry"]["location"]["lat"],
+      longitude: result["geometry"]["location"]["lng"]
+    )
+    fetch_restaurant_photo(resto, result["photos"].first["photo_reference"])
   end
 end
