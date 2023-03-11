@@ -107,7 +107,6 @@ user_twelve = User.create!(
 puts "Done."
 print "Seeding restaurants..."
 
-
 # Restaurants
 restaurant_one = Restaurant.new(
   {
@@ -217,7 +216,8 @@ restaurant_seven.save!
 #   {
 #     name: "Ginko Café & Bar",
 #     address: "308 RUE STE-CATHERINE EST, MONTREAL",
-#     description: "Popular brunch spot serving eclectic Canadian fare in a chic, open room with lots of natural light.",
+#     description:
+#     "Popular brunch spot serving eclectic Canadian fare in a chic, open room with lots of natural light.",
 #     price_range: "$",
 #     opening_hours: "7am-9pm",
 #     phone_number: "514-379-4449",
@@ -420,7 +420,6 @@ visit_fourh = Visit.new(
 visit_fourh.user = user_two
 visit_fourh.restaurant = restaurant_two
 visit_fourh.save!
-
 
 # resto3
 
@@ -672,7 +671,6 @@ visit_eightd.user = user_two
 visit_eightd.restaurant = restaurant_seven
 visit_eightd.save!
 
-
 # resto8
 
 visit_ninea = Visit.new(
@@ -815,9 +813,10 @@ puts "Done."
 
 # restaurant_eleven = Restaurant.new(
 #   {
-  #     name: "Ginko Café & BarTEST",
-  #     address: "308 RUE STE-CATHERINE EST, MONTREAL",
-  #     description: "Popular brunch spot serving eclectic Canadian fare in a chic, open room with lots of natural light.",
+#     name: "Ginko Café & BarTEST",
+#     address: "308 RUE STE-CATHERINE EST, MONTREAL",
+#     description:
+#     "Popular brunch spot serving eclectic Canadian fare in a chic, open room with lots of natural light.",
 #     price_range: "$",
 #     opening_hours: "7am-9pm",
 #     phone_number: "514-379-4449",
