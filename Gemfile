@@ -23,7 +23,7 @@ gem 'redis', '~> 4.0'
 # gem 'bcrypt', '~> 3.1.7'
 gem 'acts_as_favoritor'
 
-
+gem "sassc-rails"
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
