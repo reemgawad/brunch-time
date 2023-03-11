@@ -71,3 +71,5 @@ gem 'cloudinary', '~> 1.16.0'
 gem 'pg_search', '~> 2.3.0'
 
 gem "net-smtp", require: false
+gem 'net-imap', require: false
+gem 'net-pop', require: false
