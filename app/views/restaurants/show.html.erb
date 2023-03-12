@@ -50,9 +50,9 @@
     <%# </div> %>
 
     <div class="dropdown d-flex justify-content-center mb-3" data-controller="reviews">
-      <button class="btn btn-secondary" type="button" data-action="click->reviews#dropdown"
-              data-reviews-target="hideList"
-              data-action="click->reviews#dropdown">
+      <button class="btn btn-secondary" type="button"
+              data-action="click->reviews#dropdown"
+              data-reviews-target="hideList">
         <span>See Reviews</span>
       </button>
       <ul class="reviews-list d-none" data-reviews-target="reviewsList">
@@ -64,7 +64,7 @@
                 <p class="bold-text-restaurant-details my-0 pe-1"><%= visit.user.first_name %></p>
                 <div class="my-0 py-0 d-flex align-items-center">
                   <% visit.rating.times do  %>
-                      <%= image_tag("star.png", :alt => "star icon", size: "15x15") %>
+                    <%= image_tag("star.png", :alt => "star icon", size: "15x15") %>
                   <% end %>
                 </div>
               </div>
@@ -106,7 +106,7 @@
         <% end %>
       </div><br>
       <div class="back-to-list-button">
-        <%= link_to '←Back to brunch places', restaurants_path %>
+        <%= link_to '←Back to brunch spots', restaurants_path %>
       </div>
     </div>
   </div>
