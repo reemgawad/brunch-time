@@ -1,12 +1,12 @@
 <div class="background" data-controller="see-map-or-list-button">
   <div class="d-flex flex-column justify-content-center" data-controller="refresh-list">
     <div data-see-map-or-list-button-target="list" style='z-index: 200;
-    overflow-y: scroll;
-    height: 87vh;
-    top: 72px;
-    background: rgb(253, 248, 225);
-    width: 100vw;
-    padding-bottom: 200px;' class='position-fixed'>
+      overflow-y: scroll;
+      height: 87vh;
+      top: 72px;
+      background: rgb(253, 248, 225);
+      width: 100vw;
+      padding-bottom: 200px;' class='position-fixed'>
       <div class="container d-flex justify-content-center align-items-baseline mt-4">
         <div>
           <%= form_tag restaurants_path, method: :get, data: { refresh_list_target: 'form' } do %>
@@ -39,7 +39,7 @@
           <% end %>
         </div>
 
-        <div data-refresh-list-target="restaurantsList" >
+        <div data-refresh-list-target="restaurantsList">
           <%= render 'list', restaurants: @restaurants %>
         </div>
     </div>
@@ -67,5 +67,4 @@
                   position: fixed;"
             data-action="click->see-map-or-list-button#show">See Map <i class="far fa-map"></i></button>
   </div>
-
 </div>
