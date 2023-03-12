@@ -22,26 +22,44 @@ export default class extends Controller {
       })
         .then((response) => response.json())
         .then((data) => {
-          // Need to display the corresponding response received in HTML of the correct restaurant
-          console.log(data);
-          let restoId = document.getElementById(
+          // Inserting restaurant's open/closed status into DOM
+          let restoStatus = document.getElementById(
             `${restaurant.dataset.besttimeRestoIdValue}_status`
           );
-          restoId.innerText = data.venue_info.venue_open;
+          restoStatus.innerText = data.venue_info.venue_open;
+
+          // Inserting restaurant's busyness level  into DOM
+          let restoBusyness = document.getElementById(
+            `${restaurant.dataset.besttimeRestoIdValue}_busyness`
+          );
 
           if (data.analysis.venue_live_busyness_available) {
-            // display venue_live_busyness
-            // categories:
-            //    not busy // 0-49%
-            //    less busy than usual around // 50-79%
-            //    peak busy hours around // 80-100%
-            //    buiser than usual // over 100%
-          } else if (venue_forecast_busyness_available) {
-            // display venue_forecasted_busyness
+            // Display live busyness
+            restoBusyness.innerHTML = `<b>Activity:</b> ${this.#evaluateBusyness(
+              data.analysis.venue_live_busyness
+            )}`;
+          } else if (data.analysis.venue_forecast_busyness_available) {
+            // Display forecasted busyness
+            restoBusyness.innerHTML = `<b>Activity:</b> ${this.#evaluateBusyness(
+              data.analysis.venue_forecasted_busyness
+            )}`;
           } else {
-            // display ... ???? Could not get forecast .. check again soon ?
+            restoBusyness.innerHTML = `<b>Could not find foot-traffic data... Check again soon.</b>`;
           }
         });
     });
+  }
+
+  #evaluateBusyness(data) {
+    // Categorizing busyness data received
+    if (data <= 50) {
+      return "Not busy";
+    } else if (data <= 80) {
+      return "Less busy than usual";
+    } else if (data <= 100) {
+      return "Peak busy hours";
+    } else if (data > 100) {
+      return "Busier than usual";
+    }
   }
 }

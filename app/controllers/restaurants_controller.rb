@@ -58,7 +58,6 @@ class RestaurantsController < ApplicationController
     create_restaurant(result) unless Restaurant.find_by(address: result["formatted_address"])
     # Filter by "open now" field somehow (Using Stimulus controller to fetch open_now data?
     # # and add it to the corresponding resto html?)
-    # Add place_id field to Restaurant to check DB against place_id instead of address
   end
 
   def fetch_restaurant_photo(resto, photo_ref)
