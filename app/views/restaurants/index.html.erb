@@ -23,16 +23,15 @@
               <div data-refresh-list-target="list"></div>
               <%= submit_tag "Find", class: "brunch-button d-none", 'aria-label': 'Find button' %>
             </div>
-            </div>
+          </div>
 
             <div class="search-form-control form-group form-style" style="width: 100px;">
               <select class="text-muted focus-class" name=wait_time data-refresh-list-target="time" data-action="change->refresh-list#update" style="border-left-width: 1px;width: 97px;height: 34px;" >
-                <option value="">Wait time</option>
-                <option class="fs-4" value="5"> Up to 5min </option>
-                <option value="10"> Up to 10min </option>
-                <option value="15"> Up to 15min </option>
-                <option value="30"> Up to 30min </option>
-                <option value="60"> Up to 60min </option>
+                <option value="">Busyness</option>
+                <option class="fs-4" value="5">Not busy</option>
+                <option value="10">Less busy than usual</option>
+                <option value="15">Peak busy hours</option>
+                <option value="30">Busier than usual</option>
                 <%= submit_tag "Filter", class: "brunch-button d-none", 'aria-label': 'Filter button' %>
               </select>
             </div>
