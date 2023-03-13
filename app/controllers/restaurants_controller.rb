@@ -9,12 +9,10 @@ class RestaurantsController < ApplicationController
     fetch_restaurants
     # Filter:
     # 1- No search values present
-    # 2- Only location value
-    # 3- Only wait-time value
-    # 4- Both location and wait-time
+    # 2- Location value
     @restaurants = Restaurant.all.order(wait_time: :asc)
     @restaurants = @restaurants.where("address ILIKE ?", "%#{params[:location]}%") unless params[:location].blank?
-    @restaurants = @restaurants.where("wait_time <= ?", params[:wait_time]) unless params[:wait_time].blank?
+    # @restaurants = @restaurants.where("wait_time <= ?", params[:wait_time]) unless params[:wait_time].blank?
 
     display_markers(@restaurants)
     response_formats

@@ -18,7 +18,9 @@
   </div>
   <div class="container">
     <h1 class="mb-4"><%= @restaurant.name %></h1>
-    <p><%= image_tag("clock.png", :alt => "clock icon", size: "20x20") %><span class="bold-text-restaurant-details"> Current wait-time: </span><%= @restaurant.wait_time %> min</p>
+    <% unless @restaurant.wait_time.nil? %>
+      <p><%= image_tag("clock.png", :alt => "clock icon", size: "20x20") %><span class="bold-text-restaurant-details"> Current wait-time: </span><%= @restaurant.wait_time %> min</p>
+    <% end %>
     <p class ="d-flex align-items-center">
       <%= image_tag("star.png", :alt => "star icon", size: "20x19") %>
       <span class="bold-text-restaurant-details px-1" data-bs-toggle="tooltip"

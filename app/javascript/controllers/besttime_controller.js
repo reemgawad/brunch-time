@@ -23,7 +23,7 @@ export default class extends Controller {
         .then((response) => response.json())
         .then((data) => {
           // Hiding closed restaurants
-          if (data.venue_info.venue_open === 'closed') {
+          if (data.venue_info.venue_open == 'closed') {
             restaurant.classList.add('d-none')
           }
 
@@ -43,7 +43,7 @@ export default class extends Controller {
               data.analysis.venue_forecasted_busyness
             )}`;
           } else {
-            restoBusyness.innerHTML = `<b>Could not find foot-traffic data... Check again soon.</b>`;
+            restoBusyness.innerHTML = `<b>Could not find foot-traffic data... Check again in a bit.</b>`;
           }
         });
     });

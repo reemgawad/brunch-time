@@ -1,6 +1,8 @@
 <div class="container margin-fix"
      data-controller="besttime"
-     data-besttime-api-key-value="<%= ENV['BESTTIME_KEY'] %>">
+     data-besttime-api-key-value="<%= ENV['BESTTIME_KEY'] %>"
+     data-controller="refresh-list"
+     data-refresh-list-targer="restaurants">
   <div class="row">
     <% restaurants.each do |restaurant| %>
       <%= link_to restaurant_path(restaurant) do %>

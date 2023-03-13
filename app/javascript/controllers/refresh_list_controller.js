@@ -6,7 +6,7 @@ export default class extends Controller {
   connect() {}
 
   update() {
-    const url = `${this.formTarget.action}?location=${this.searchInputTarget.value}&wait_time=${this.timeTarget.value}`;
+    const url = `${this.formTarget.action}?location=${this.searchInputTarget.value}&busyness=${this.timeTarget.value}`;
     fetch(url, { headers: { 'Accept': 'application/json' } })
       .then(response => response.json())
       .then((data) => {
