@@ -6,7 +6,7 @@ class RestaurantsController < ApplicationController
   before_action :set_restaurant, only: %i[show toggle_favorite]
 
   def index
-    # fetch_restaurants
+    fetch_restaurants
     # Filter:
     # 1- No search values present
     # 2- Only location value
