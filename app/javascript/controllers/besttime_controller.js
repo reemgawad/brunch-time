@@ -22,11 +22,10 @@ export default class extends Controller {
       })
         .then((response) => response.json())
         .then((data) => {
-          // Inserting restaurant's open/closed status into DOM
-          let restoStatus = document.getElementById(
-            `${restaurant.dataset.besttimeRestoIdValue}_status`
-          );
-          restoStatus.innerText = data.venue_info.venue_open;
+          // Hiding closed restaurants
+          if (data.venue_info.venue_open == 'closed') {
+            restaurant.classList.add('d-none')
+          }
 
           // Inserting restaurant's busyness level  into DOM
           let restoBusyness = document.getElementById(
@@ -44,7 +43,7 @@ export default class extends Controller {
               data.analysis.venue_forecasted_busyness
             )}`;
           } else {
-            restoBusyness.innerHTML = `<b>Could not find foot-traffic data... Check again soon.</b>`;
+            restoBusyness.innerHTML = `<b>Could not find foot-traffic data... Check again in a bit.</b>`;
           }
         });
     });

@@ -9,12 +9,10 @@ class RestaurantsController < ApplicationController
     fetch_restaurants
     # Filter:
     # 1- No search values present
-    # 2- Only location value
-    # 3- Only wait-time value
-    # 4- Both location and wait-time
+    # 2- Location value
     @restaurants = Restaurant.all.order(wait_time: :asc)
     @restaurants = @restaurants.where("address ILIKE ?", "%#{params[:location]}%") unless params[:location].blank?
-    @restaurants = @restaurants.where("wait_time <= ?", params[:wait_time]) unless params[:wait_time].blank?
+    # @restaurants = @restaurants.where("wait_time <= ?", params[:wait_time]) unless params[:wait_time].blank?
 
     display_markers(@restaurants)
     response_formats
@@ -40,7 +38,7 @@ class RestaurantsController < ApplicationController
   end
 
   def fetch_restaurants
-    url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=brunch_restaurants%20in%20Montreal&key=#{ENV['PLACES_API_KEY']}"
+    url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=brunch_restaurants%20in%20Montreal,opennow&key=#{ENV['PLACES_API_KEY']}"
     url_serialized = URI.parse(url).read
     @results = JSON.parse(url_serialized)["results"]
     @results.each do |object|
@@ -56,8 +54,6 @@ class RestaurantsController < ApplicationController
     # Check if address already exists in DB
     # Create a new Restaurant object using data received
     create_restaurant(result) unless Restaurant.find_by(address: result["formatted_address"])
-    # Filter by "open now" field somehow (Using Stimulus controller to fetch open_now data?
-    # # and add it to the corresponding resto html?)
   end
 
   def fetch_restaurant_photo(resto, photo_ref)
@@ -77,7 +73,7 @@ class RestaurantsController < ApplicationController
       latitude: result["geometry"]["location"]["lat"],
       longitude: result["geometry"]["location"]["lng"]
     )
-    fetch_restaurant_photo(resto, result["photos"].first["photo_reference"])
+    fetch_restaurant_photo(resto, result["photos"].first["photo_reference"]) unless result["photos"].nil?
   end
 
   # Map marker helper
