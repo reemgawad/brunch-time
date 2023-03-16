@@ -7,9 +7,10 @@ class RestaurantsController < ApplicationController
 
   def index
     fetch_restaurants
-    # Filter:
+
     # 1- No search values present
     # 2- Location value
+    # 3- Wait-time value (tbd)
     @restaurants = Restaurant.all.order(wait_time: :asc)
     @restaurants = @restaurants.where("address ILIKE ?", "%#{params[:location]}%") unless params[:location].blank?
     # @restaurants = @restaurants.where("wait_time <= ?", params[:wait_time]) unless params[:wait_time].blank?
@@ -37,6 +38,8 @@ class RestaurantsController < ApplicationController
     @restaurant = Restaurant.find(params[:id])
   end
 
+  # Calling Places API to get brunch spots in MTL
+  # Text Search endpoint - Limit of 20 results
   def fetch_restaurants
     url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=brunch_restaurants%20in%20Montreal,opennow&key=#{ENV['PLACES_API_KEY']}"
     url_serialized = URI.parse(url).read
@@ -46,6 +49,7 @@ class RestaurantsController < ApplicationController
     end
   end
 
+  # Place Details endpoint
   def fetch_single_restaurant(place_id)
     url = "https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&fields=name,rating,formatted_phone_number,formatted_address,geometry,current_opening_hours,price_level,photos&key=#{ENV['PLACES_API_KEY']}"
     url_serialized = URI.parse(url).read
@@ -53,9 +57,12 @@ class RestaurantsController < ApplicationController
 
     # Check if address already exists in DB
     # Create a new Restaurant object using data received
-    create_restaurant(result) unless Restaurant.find_by(address: result["formatted_address"])
+    if result && !Restaurant.find_by(address: result["formatted_address"])
+      create_restaurant(result)
+    end
   end
 
+  # Place Photos endpoint
   def fetch_restaurant_photo(resto, photo_ref)
     url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=#{photo_ref}&key=#{ENV['PLACES_API_KEY']}"
     file = URI.parse(url).open
